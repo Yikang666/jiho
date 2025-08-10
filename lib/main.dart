@@ -168,15 +168,68 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class ToolsPage extends StatelessWidget {
+class ToolsPage extends StatefulWidget {
+  @override
+  _ToolsPageState createState() => _ToolsPageState();
+}
+
+class _ToolsPageState extends State<ToolsPage> {
   // 从配置文件中获取工具分组数据
   final List<ToolGroup> _toolGroups = ToolsConfig.toolGroups;
+  // 搜索控制器
+  final TextEditingController _searchController = TextEditingController();
+  // 搜索结果
+  List<ToolItem> _searchResults = [];
+  // 是否处于搜索模式
+  bool _isSearching = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    setState(() {
+      if (_searchController.text.isEmpty) {
+        _isSearching = false;
+        _searchResults.clear();
+      } else {
+        _isSearching = true;
+        _searchResults = _toolGroups
+            .expand((group) => group.tools)
+            .where((tool) => tool.title
+                .toLowerCase()
+                .contains(_searchController.text.toLowerCase()))
+            .toList();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('首页'),
+        title: _isSearching
+            ? TextField(
+                controller: _searchController,
+                autofocus: true,
+                style: TextStyle(color: Colors.white),
+                cursorColor: Colors.white,
+                decoration: InputDecoration(
+                  hintText: '搜索工具...',
+                  hintStyle: TextStyle(color: Colors.white70),
+                  border: InputBorder.none,
+                ),
+              )
+            : Text('首页'),
         backgroundColor: Theme.of(context).colorScheme.primary,
         titleTextStyle: TextStyle(
           color: Colors.white,
@@ -185,29 +238,91 @@ class ToolsPage extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.search, color: Colors.white),
+            icon: Icon(_isSearching ? Icons.close : Icons.search, color: Colors.white),
             onPressed: () {
-              // 搜索功能
+              setState(() {
+                if (_isSearching) {
+                  _searchController.clear();
+                  _isSearching = false;
+                  _searchResults.clear();
+                } else {
+                  _isSearching = true;
+                }
+              });
             },
           ),
         ],
       ),
-      body: CustomScrollView(
-        slivers: [
-        SliverPadding(
-          padding: EdgeInsets.symmetric(vertical: 16.0),
-          sliver: SliverList(
-            delegate: SliverChildListDelegate(
-              List.generate(
-                _toolGroups.length,
-                (index) => _buildToolGroup(_toolGroups[index], context),
-              ),
+      body: _isSearching
+          ? _buildSearchResults()
+          : CustomScrollView(
+              slivers: [
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                  sliver: SliverList(
+                    delegate: SliverChildListDelegate(
+                      List.generate(
+                        _toolGroups.length,
+                        (index) => _buildToolGroup(_toolGroups[index], context),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
+    );
+  }
+
+  Widget _buildSearchResults() {
+    if (_searchResults.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.search_off, size: 64, color: Colors.grey),
+            SizedBox(height: 16),
+            Text('未找到相关工具', style: TextStyle(fontSize: 18)),
+            SizedBox(height: 8),
+            Text('请尝试其他关键词', style: TextStyle(color: Colors.grey)),
+          ],
+        ),
+      );
+    }
+
+    return ListView.builder(
+      itemCount: _searchResults.length,
+      itemBuilder: (context, index) {
+        return _buildSearchResultItem(_searchResults[index]);
+      },
+    );
+  }
+
+  Widget _buildSearchResultItem(ToolItem tool) {
+    return Card(
+      margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      elevation: 4.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+      child: ListTile(
+        contentPadding: EdgeInsets.all(16.0),
+        leading: Icon(
+          tool.icon,
+          size: 32.0,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+        title: Text(
+          tool.title,
+          style: TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
           ),
         ),
-      ],
-    ),
-  );
+        onTap: () {
+          Navigator.pushNamed(context, '/${tool.id}');
+        },
+      ),
+    );
   }
 
   Widget _buildToolGroup(ToolGroup group, BuildContext context) {
@@ -400,12 +515,12 @@ class PlaceholderPage extends StatelessWidget {
             const SizedBox(height: 16),
             const Text(
               '此页面尚未实现',
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 8),
             const Text(
               '请创建对应的页面文件',
-              style: TextStyle(fontSize: 14, color: Colors.grey),
+              style: const TextStyle(fontSize: 14, color: Colors.grey),
             ),
           ],
         ),
@@ -447,7 +562,7 @@ class FavoritesPage extends StatelessWidget {
             const SizedBox(height: 24),
             const Text(
               '收藏页面',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
               ),
@@ -455,12 +570,12 @@ class FavoritesPage extends StatelessWidget {
             const SizedBox(height: 16),
             const Text(
               '您还没有收藏任何内容',
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 8),
             const Text(
               '点击工具卡片上的收藏按钮来添加收藏',
-              style: TextStyle(fontSize: 14, color: Colors.grey),
+              style: const TextStyle(fontSize: 14, color: Colors.grey),
             ),
           ],
         ),
