@@ -6,14 +6,14 @@ import "pages/map.dart";
 class ToolItem {
   final String id;
   final String title;
-  final IconData icon;
   final String pagePath;
+  final IconData? icon;
 
   ToolItem({
     required this.id,
     required this.title,
-    required this.icon,
     required this.pagePath,
+    this.icon,
   });
 }
 
@@ -41,20 +41,20 @@ class ToolsConfig {
         ToolItem(
           id: 'calculator',
           title: '计算器',
-          icon: Icons.calculate,
           pagePath: 'pages/calculator_page.dart',
+          icon: Icons.calculate_outlined,
         ),
         ToolItem(
           id: 'translator',
           title: '翻译',
-          icon: Icons.translate,
           pagePath: 'pages/translator_page.dart',
+          icon: Icons.translate_outlined,
         ),
         ToolItem(
           id: 'notebook',
           title: '记事本',
-          icon: Icons.note,
           pagePath: 'pages/notebook_page.dart',
+          icon: Icons.note_outlined,
         ),
       ],
     ),
@@ -65,20 +65,20 @@ class ToolsConfig {
         ToolItem(
           id: 'timer',
           title: '计时器',
-          icon: Icons.timer,
           pagePath: 'pages/timer_page.dart',
+          icon: Icons.timer_outlined,
         ),
         ToolItem(
           id: 'qr_code',
           title: '二维码',
-          icon: Icons.qr_code,
           pagePath: 'pages/qr_code_page.dart',
+          icon: Icons.qr_code_outlined,
         ),
         ToolItem(
           id: 'color_picker',
           title: '取色器',
-          icon: Icons.color_lens,
           pagePath: 'pages/color_picker_page.dart',
+          icon: Icons.colorize_outlined,
         ),
       ],
     ),
@@ -89,20 +89,20 @@ class ToolsConfig {
         ToolItem(
           id: 'camera',
           title: '相机',
-          icon: Icons.camera,
           pagePath: 'pages/camera_page.dart',
+          icon: Icons.camera_alt_outlined,
         ),
         ToolItem(
           id: 'music',
           title: '音乐',
-          icon: Icons.music_note,
           pagePath: 'pages/music_page.dart',
+          icon: Icons.music_note_outlined,
         ),
         ToolItem(
           id: 'map',
           title: '地图',
-          icon: Icons.map,
           pagePath: 'pages/map.dart',
+          icon: Icons.map_outlined,
         ),
       ],
     ),

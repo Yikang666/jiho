@@ -2,24 +2,24 @@ import 'package:flutter/material.dart';
 
 // 主题配置类
 class ThemeConfig {
-  // 主色调
-  static const primaryColor = Color(0xFF1E88E5);
-  static const primaryLightColor = Color(0xFF64B5F6);
-  static const primaryDarkColor = Color(0xFF0D47A1);
+  // 主色调 - 莫奈风格柔和蓝
+  static const primaryColor = Color(0xFF88A0A8);
+  static const primaryLightColor = Color(0xFFB4C7CC);
+  static const primaryDarkColor = Color(0xFF5A6D73);
 
-  // 辅助色
-  static const accentColor = Color(0xFFFFA000);
-  static const accentLightColor = Color(0xFFFFD740);
-  static const accentDarkColor = Color(0xFFF57C00);
+  // 辅助色 - 莫奈风格紫粉色
+  static const accentColor = Color(0xFFC9A9A6);
+  static const accentLightColor = Color(0xFFE8D3D0);
+  static const accentDarkColor = Color(0xFF9D7F7C);
 
-  // 中性色
-  static const backgroundColor = Color(0xFFF5F5F5);
-  static const surfaceColor = Colors.white;
-  static const errorColor = Color(0xFFD32F2F);
+  // 中性色 - 莫奈风格柔和灰
+  static const backgroundColor = Color(0xFFF7F5F2);
+  static const surfaceColor = Color(0xFFFAF8F5);
+  static const errorColor = Color(0xFFD96060);
 
-  // 文本颜色
-  static const textPrimaryColor = Color(0xFF212121);
-  static const textSecondaryColor = Color(0xFF757575);
+  // 文本颜色 - 莫奈风格自然色
+  static const textPrimaryColor = Color(0xFF3A3A3A);
+  static const textSecondaryColor = Color(0xFF6D6D6D);
   static const textOnPrimaryColor = Colors.white;
   static const textOnAccentColor = Colors.white;
 
@@ -52,6 +52,12 @@ class ThemeConfig {
       selectedItemColor: primaryColor,
       unselectedItemColor: textSecondaryColor,
     ),
+    popupMenuTheme: PopupMenuThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(12.0)),
+      ),
+      elevation: 8.0,
+    ),
   );
 
   // 暗黑主题
@@ -80,6 +86,12 @@ class ThemeConfig {
       selectedItemColor: primaryLightColor,
       unselectedItemColor: textSecondaryColor,
       backgroundColor: Color(0xFF1E1E1E),
+    ),
+    popupMenuTheme: PopupMenuThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(12.0)),
+      ),
+      elevation: 8.0,
     ),
   );
 }

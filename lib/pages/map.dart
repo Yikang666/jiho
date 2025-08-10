@@ -25,7 +25,7 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('百度地图'),
+        title: const Text('地图'),
         backgroundColor: ThemeConfig.primaryColor,
       ),
       body: WebViewWidget(controller: _controller),
